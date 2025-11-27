@@ -1,6 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+// Ensure dates are serialized as ISO strings consistently
+function serializeTodo(todo: {
+  id: string;
+  text: string;
+  scheduledAt: Date | null;
+  completed: boolean;
+  createdAt: Date;
+}) {
+  return {
+    ...todo,
+    scheduledAt: todo.scheduledAt ? todo.scheduledAt.toISOString() : null,
+    createdAt: todo.createdAt.toISOString(),
+  };
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -32,7 +47,7 @@ export async function PUT(
         scheduledAt: scheduledDate,
       },
     });
-    return NextResponse.json(todo);
+    return NextResponse.json(serializeTodo(todo));
   } catch {
     return NextResponse.json({ error: "Todo not found" }, { status: 404 });
   }

@@ -1,6 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+// Ensure dates are serialized as ISO strings consistently
+function serializeTodo(todo: {
+  id: string;
+  text: string;
+  scheduledAt: Date | null;
+  completed: boolean;
+  createdAt: Date;
+}) {
+  return {
+    ...todo,
+    scheduledAt: todo.scheduledAt ? todo.scheduledAt.toISOString() : null,
+    createdAt: todo.createdAt.toISOString(),
+  };
+}
+
 export async function GET() {
   const todos = await prisma.todo.findMany({
     orderBy: [
@@ -8,7 +23,7 @@ export async function GET() {
       { createdAt: "asc" },
     ],
   });
-  return NextResponse.json(todos);
+  return NextResponse.json(todos.map(serializeTodo));
 }
 
 export async function POST(request: Request) {
@@ -34,5 +49,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(todo, { status: 201 });
+  return NextResponse.json(serializeTodo(todo), { status: 201 });
 }
