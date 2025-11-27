@@ -44,6 +44,15 @@ function getTimeFromISO(dateString: string | null): string {
   return `${hours}:${minutes}`;
 }
 
+// Create a local date from date and time strings, return as ISO string (UTC)
+function createLocalDateISO(dateStr: string, timeStr: string): string {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  // Create date using local timezone (month is 0-indexed)
+  const localDate = new Date(year, month - 1, day, hours, minutes, 0);
+  return localDate.toISOString();
+}
+
 export function TodoList() {
   const { todos, isLoading, error: loadError, addTodo, updateTodo, deleteTodo, setDraggedTodoId } = useTodos();
   const [newTodoText, setNewTodoText] = useState("");
@@ -72,9 +81,7 @@ export function TodoList() {
     if (newTodoDate) {
       // If time is provided, use it; otherwise default to midnight (date only)
       const time = newTodoTime || "00:00";
-      // Create a local Date and convert to ISO string (UTC) for consistent storage
-      const localDate = new Date(`${newTodoDate}T${time}:00`);
-      scheduledAt = localDate.toISOString();
+      scheduledAt = createLocalDateISO(newTodoDate, time);
     }
 
     try {
@@ -113,9 +120,7 @@ export function TodoList() {
     if (editDate) {
       // If time is provided, use it; otherwise default to midnight (date only)
       const time = editTime || "00:00";
-      // Create a local Date and convert to ISO string (UTC) for consistent storage
-      const localDate = new Date(`${editDate}T${time}:00`);
-      scheduledAt = localDate.toISOString();
+      scheduledAt = createLocalDateISO(editDate, time);
     }
 
     try {
