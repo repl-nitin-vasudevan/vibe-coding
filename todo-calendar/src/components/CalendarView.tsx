@@ -44,12 +44,10 @@ function formatTime(dateString: string | null): string {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function formatDateForApi(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}T00:00:00`;
+  // Create a new date at midnight local time and convert to ISO string
+  const localMidnight = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+  return localMidnight.toISOString();
 }
 
 function getTodosForDate(todos: Todo[], date: Date): Todo[] {

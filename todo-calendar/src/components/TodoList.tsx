@@ -72,7 +72,9 @@ export function TodoList() {
     if (newTodoDate) {
       // If time is provided, use it; otherwise default to midnight (date only)
       const time = newTodoTime || "00:00";
-      scheduledAt = `${newTodoDate}T${time}:00`;
+      // Create a local Date and convert to ISO string (UTC) for consistent storage
+      const localDate = new Date(`${newTodoDate}T${time}:00`);
+      scheduledAt = localDate.toISOString();
     }
 
     try {
@@ -111,7 +113,9 @@ export function TodoList() {
     if (editDate) {
       // If time is provided, use it; otherwise default to midnight (date only)
       const time = editTime || "00:00";
-      scheduledAt = `${editDate}T${time}:00`;
+      // Create a local Date and convert to ISO string (UTC) for consistent storage
+      const localDate = new Date(`${editDate}T${time}:00`);
+      scheduledAt = localDate.toISOString();
     }
 
     try {
