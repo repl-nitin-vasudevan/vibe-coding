@@ -50,9 +50,10 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-1. **Clone the repository** (or navigate to the project directory):
+1. **Clone the repository**:
    ```bash
-   cd todo-calendar
+   git clone https://github.com/repl-nitin-vasudevan/vibe-coding.git
+   cd vibe-coding/todo-calendar
    ```
 
 2. **Install dependencies**:
